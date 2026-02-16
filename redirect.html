@@ -2,11 +2,13 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Authorization Complete</title>
+    <title>TikTok Authorization Complete</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f5f5f5;
+            background: #f4f4f4;
+            margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -15,55 +17,74 @@
         .card {
             background: white;
             padding: 40px;
-            border-radius: 10px;
-            text-align: center;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
             max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+        h2 {
+            margin-top: 0;
         }
         code {
-            background: #eee;
-            padding: 6px 10px;
             display: block;
+            background: #f0f0f0;
+            padding: 12px;
             margin-top: 15px;
+            border-radius: 6px;
             word-break: break-all;
+            font-size: 14px;
         }
         button {
             margin-top: 20px;
             padding: 10px 20px;
             border: none;
+            border-radius: 6px;
             background: black;
             color: white;
             cursor: pointer;
+        }
+        button:hover {
+            opacity: 0.85;
+        }
+        .error {
+            color: red;
+            margin-top: 15px;
         }
     </style>
 </head>
 <body>
     <div class="card">
         <h2>Authorization Successful</h2>
-        <p>You may now return to the application.</p>
+        <p>Copy the code below and paste it into the application.</p>
 
         <div id="codeBlock" style="display:none;">
-            <p>Authorization Code:</p>
             <code id="authCode"></code>
+            <button onclick="copyCode()">Copy Code</button>
         </div>
 
-        <button onclick="copyCode()">Copy Code</button>
+        <div id="errorBlock" class="error" style="display:none;">
+            Authorization failed or code missing.
+        </div>
     </div>
 
     <script>
         function getQueryParam(name) {
-            const urlParams = new URLSearchParams(window.location.search);
-            return urlParams.get(name);
+            const params = new URLSearchParams(window.location.search);
+            return params.get(name);
         }
 
         const code = getQueryParam("code");
+        const error = getQueryParam("error");
 
         if (code) {
             document.getElementById("authCode").textContent = code;
             document.getElementById("codeBlock").style.display = "block";
+        } else {
+            document.getElementById("errorBlock").style.display = "block";
         }
 
         function copyCode() {
-            if (!code) return;
             navigator.clipboard.writeText(code);
             alert("Authorization code copied!");
         }
